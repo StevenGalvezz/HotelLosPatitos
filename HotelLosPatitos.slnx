@@ -1,3 +1,6 @@
 <Solution>
-  <Project Path="HotelLosPatitos/HotelLosPatitos.csproj" />
+  <Project Path="HotelLosPatitos.Application/HotelLosPatitos.Application.csproj" />
+  <Project Path="HotelLosPatitos.Domain/HotelLosPatitos.Domain.csproj" />
+  <Project Path="HotelLosPatitos.Infrastructure/HotelLosPatitos.Infrastructure.csproj" />
+  <Project Path="HotelLosPatitos/HotelLosPatitos.Web.csproj" />
 </Solution>

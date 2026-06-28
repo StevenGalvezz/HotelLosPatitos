@@ -1,3 +1,5 @@
+using Microsoft.EntityFrameworkCore;
+
 namespace HotelLosPatitos
 {
     public class Program
@@ -5,6 +7,17 @@ namespace HotelLosPatitos
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            // esto es para obtener la cadena de conexión desde appsettings.json
+            var connectionString = builder.Configuration.GetConnectionString("CadenaConexion");
+
+            // esto para registrar el DbContext en el contenedor de dependencias
+            builder.Services.AddDbContext<HotelLosPatitos.Infrastructure.Data.HotelDbContext>(options =>
+                options.UseSqlServer(connectionString));
+
+            // inyección de dependencias
+            builder.Services.AddScoped<HotelLosPatitos.Domain.Interfaces.IHabitacionRepository, HotelLosPatitos.Infrastructure.Repositories.HabitacionRepository>();
+            builder.Services.AddScoped<HotelLosPatitos.Domain.Interfaces.IReservacionRepository, HotelLosPatitos.Infrastructure.Repositories.ReservacionRepository>();
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();

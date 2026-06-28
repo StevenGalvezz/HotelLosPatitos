@@ -20,7 +20,7 @@ namespace HotelLosPatitos.Domain.Entities
         public DateTime? FechaDeModificacion { get; set; }
         public bool Estado { get; set; } // true = Activo, false = Inactivo
 
-        // Propiedad de navegación para la relación (Una habitación tiene muchas reservaciones)
-        //public virtual ICollection<Reservacion> Reservaciones { get; set; } = new List<Reservacion>();
+        // propiedad de navegación para la relación (Una habitación tiene muchas reservaciones)
+        public virtual ICollection<Reservacion> Reservaciones { get; set; } = new List<Reservacion>();
     }
 }
