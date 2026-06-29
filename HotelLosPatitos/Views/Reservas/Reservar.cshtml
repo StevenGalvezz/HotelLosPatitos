@@ -1,0 +1,151 @@
+﻿@model HotelLosPatitos.Domain.Entities.Reservacion
+@{
+    ViewData["Title"] = "Confirmar Reservación";
+    var habitacion = ViewData["Habitacion"] as HotelLosPatitos.Domain.Entities.Habitacion;
+}
+
+<div class="container my-5">
+    <div class="row g-4">
+
+        <!-- Columna Izquierda: Formulario del Cliente -->
+        <div class="col-lg-7">
+            <div class="card shadow-sm border-0 rounded-3">
+                <div class="card-header bg-primary text-white p-4">
+                    <h4 class="mb-1 fw-bold"><i class="bi bi-person-check-fill me-2"></i>Datos del Huésped</h4>
+                    <p class="mb-0 text-white-50 fs-7">Por favor complete su información personal para registrar la reserva.</p>
+                </div>
+                <div class="card-body p-4 bg-light">
+                    <form asp-action="Reservar" method="post">
+                        @Html.AntiForgeryToken()
+
+                        <!-- IdHabitacion viaja oculto (precargado) -->
+                        <input type="hidden" asp-for="IdHabitacion" />
+
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger rounded-3 fs-7" role="alert"></div>
+
+                        <div class="row g-3">
+                            <div class="col-12">
+                                <label asp-for="NombreDeLaPersona" class="form-label fw-semibold text-secondary">Nombre Completo</label>
+                                <input asp-for="NombreDeLaPersona" class="form-control" placeholder="Ej: Steven Alana" maxlength="150" required />
+                                <span asp-validation-for="NombreDeLaPersona" class="text-danger fs-7"></span>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label asp-for="Identificacion" class="form-label fw-semibold text-secondary">Identificación (Cédula/Pasaporte)</label>
+                                <input asp-for="Identificacion" class="form-control" placeholder="Ej: 112340567" maxlength="30" required />
+                                <span asp-validation-for="Identificacion" class="text-danger fs-7"></span>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label asp-for="Telefono" class="form-label fw-semibold text-secondary">Teléfono</label>
+                                <input asp-for="Telefono" class="form-control" placeholder="Ej: 88888888" maxlength="10" required />
+                                <span asp-validation-for="Telefono" class="text-danger fs-7"></span>
+                            </div>
+
+                            <div class="col-12">
+                                <label asp-for="Correo" class="form-label fw-semibold text-secondary">Correo Electrónico</label>
+                                <input asp-for="Correo" type="email" class="form-control" placeholder="ejemplo@correo.com" maxlength="50" required />
+                                <span asp-validation-for="Correo" class="text-danger fs-7"></span>
+                            </div>
+
+                            <div class="col-12">
+                                <label asp-for="FechaNacimiento" class="form-label fw-semibold text-secondary">Fecha de Nacimiento</label>
+                                <input asp-for="FechaNacimiento" type="date" class="form-control" required />
+                                <span asp-validation-for="FechaNacimiento" class="text-danger fs-7"></span>
+                            </div>
+
+                            <div class="col-12">
+                                <label asp-for="Direccion" class="form-label fw-semibold text-secondary">Dirección de Residencia</label>
+                                <textarea asp-for="Direccion" class="form-control" rows="2" placeholder="Dirección exacta..." maxlength="200" required></textarea>
+                                <span asp-validation-for="Direccion" class="text-danger fs-7"></span>
+                            </div>
+
+                            <hr class="my-3 opacity-25">
+
+                            <!-- Fechas de Estadía -->
+                            <div class="col-md-6">
+                                <label asp-for="FechaInicioReserva" class="form-label fw-semibold text-secondary">Check-In (Inicio)</label>
+                                <input asp-for="FechaInicioReserva" type="date" class="form-control" required />
+                                <span asp-validation-for="FechaInicioReserva" class="text-danger fs-7"></span>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label asp-for="FechaFinReserva" class="form-label fw-semibold text-secondary">Check-Out (Fin)</label>
+                                <input asp-for="FechaFinReserva" type="date" class="form-control" required />
+                                <span asp-validation-for="FechaFinReserva" class="text-danger fs-7"></span>
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+                            <a asp-action="Index" class="btn btn-outline-secondary px-4">Cancelar</a>
+                            <button type="submit" class="btn btn-success px-5 fw-bold shadow-sm">
+                                <i class="bi bi-wallet2 me-2"></i>Confirmar y Pagar
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Columna Derecha: Resumen de la Habitación Seleccionada -->
+        <div class="col-lg-5">
+            <div class="card shadow-sm border-0 rounded-3 position-sticky" style="top: 20px;">
+                <div class="card-header bg-dark text-white p-4">
+                    <h5 class="mb-0 fw-bold"><i class="bi bi-building me-2 text-warning"></i>Detalle de Habitación</h5>
+                </div>
+                <div class="card-body p-4 bg-white">
+                    <div class="mb-3">
+                        <span class="fs-7 text-muted d-block">Habitación seleccionada</span>
+                        <h4 class="fw-bold text-primary mb-1">@habitacion!.NombreDeHabitacion</h4>
+                        <span class="badge bg-light text-dark border">Código: @habitacion.CodigoDeHabitacion</span>
+                        <span class="badge bg-light text-dark border">Ubicación: @habitacion.Ubicacion</span>
+                    </div>
+
+                    <div class="p-3 bg-light rounded-3 mb-4">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="text-secondary fs-7">Tipo de Habitación:</span>
+                            <span class="fw-bold">
+                                @switch (habitacion.TipoDeHabitacion)
+                                {
+                                    case 1:
+                                        <text>Junior</text>
+                                        ; break;
+                                    case 2:
+
+                                        <text>Superior</text>
+                                        ; break;
+                                    case 3:
+
+                                        <text>Suite</text>
+                                        ; break;
+                                }
+                            </span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="text-secondary fs-7">Capacidad Máxima:</span>
+                            <span class="fw-semibold text-dark">@habitacion.CantidadDeHuespedesPermitidos Personas</span>
+                        </div>
+                    </div>
+
+                    <h5 class="fw-bold text-dark mb-3"><i class="bi bi-cash-coin me-2 text-success"></i>Costos Operativos</h5>
+                    <ul class="list-group list-group-flush mb-0">
+                        <li class="list-group-item d-flex justify-content-between align-items-center px-0 bg-transparent">
+                            <span class="text-muted fs-7">Costo por Noche</span>
+                            <span class="fw-bold text-dark">Subtotal: ₡@habitacion.CostoDeReserva.ToString("N2")</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center px-0 bg-transparent">
+                            <span class="text-muted fs-7">Monto Único de Limpieza</span>
+                            <span class="fw-bold text-dark">₡@habitacion.CostoDeLimpieza.ToString("N2")</span>
+                        </li>
+                    </ul>
+
+                    <div class="alert alert-warning border-0 shadow-sm rounded-3 mt-4 fs-7 mb-0">
+                        <i class="bi bi-info-circle-fill me-2 text-warning-emphasis"></i>
+                        El monto total de su factura final se calculará automáticamente multiplicando las noches de hospedaje por el costo por día, sumando la tasa de limpieza fija.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

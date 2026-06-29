@@ -16,7 +16,7 @@ namespace HotelLosPatitos.Web.Controllers
             _habitacionService = habitacionService;
         }
 
-        // 1. LISTAR HABITACIONES (Vista Principal del Administrador)
+        // listar habitaciones (Vista Principal del Administrador)
         // URL: /Habitaciones
         public async Task<IActionResult> Index()
         {
@@ -24,14 +24,14 @@ namespace HotelLosPatitos.Web.Controllers
             return View(habitaciones);
         }
 
-        // 2. REGISTRAR HABITACIÓN (Mostrar Formulario)
+        // registrar habitación (Mostrar Formulario)
         // GET: /Habitaciones/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // 3. REGISTRAR HABITACIÓN (Procesar y Guardar Datos)
+        // registrar habitación (Procesar y Guardar Datos)
         // POST: /Habitaciones/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -65,7 +65,7 @@ namespace HotelLosPatitos.Web.Controllers
             return View(habitacion);
         }
 
-        // 4. EDIDAR HABITACIÓN (Mostrar Formulario con Datos Existentes)
+        // editar habitacion (Mostrar Formulario con Datos Existentes)
         // GET: /Habitaciones/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -83,7 +83,7 @@ namespace HotelLosPatitos.Web.Controllers
             return View(habitacion);
         }
 
-        // 5. EDITAR HABITACIÓN (Procesar Cambios)
+        // editar habitacion (Procesar Cambios)
         // POST: /Habitaciones/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]

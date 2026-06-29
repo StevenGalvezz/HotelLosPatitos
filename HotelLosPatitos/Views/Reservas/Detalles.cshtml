@@ -1,0 +1,125 @@
+﻿@model HotelLosPatitos.Domain.Entities.Reservacion
+@{
+    ViewData["Title"] = "Comprobante de Reserva";
+    var habitacion = ViewData["Habitacion"] as HotelLosPatitos.Domain.Entities.Habitacion;
+    int noches = (Model.FechaFinReserva.Date - Model.FechaInicioReserva.Date).Days;
+    if (noches <= 0) noches = 1;
+}
+
+<div class="container my-5" style="max-width: 750px;">
+    <!-- Botón de salida -->
+    <div class="mb-3 d-print-none">
+        <a asp-action="Index" class="btn btn-outline-primary btn-sm px-3">
+            <i class="bi bi-house-door me-1"></i> Ir al Inicio
+        </a>
+        <button onclick="window.print()" class="btn btn-light border btn-sm px-3 float-end">
+            <i class="bi bi-printer me-1"></i> Imprimir Factura
+        </button>
+    </div>
+
+    <!-- Contenedor Estilo Factura -->
+    <div class="card shadow border-0 rounded-3 overflow-hidden">
+        <div class="bg-success text-white p-4 text-center">
+            <i class="bi bi-check-circle-fill display-5 mb-2 d-block"></i>
+            <h3 class="fw-bold mb-0">¡Reservación Confirmada Exitosamente!</h3>
+            <p class="mb-0 text-white-50 fs-7">Guarde su número de reservación para consultas futuras.</p>
+        </div>
+
+        <div class="card-body p-5 bg-white">
+            <!-- Encabezado Factura -->
+            <div class="row mb-4">
+                <div class="col-sm-6">
+                    <h5 class="fw-bold text-dark mb-1">Hotel Los Patitos S.A.</h5>
+                    <p class="text-muted fs-7 mb-0">Cédula Jurídica: 3-101-XXXXXX<br>Costa Rica</p>
+                </div>
+                <div class="col-sm-6 text-sm-end mt-3 mt-sm-0">
+                    <span class="text-muted text-uppercase d-block fs-7">Comprobante N°</span>
+                    <h3 class="fw-mono text-success fw-bold">#0000@Model.Id</h3>
+                </div>
+            </div>
+
+            <hr class="opacity-25">
+
+            <!-- Información del Cliente -->
+            <div class="row my-4">
+                <div class="col-12">
+                    <h6 class="fw-bold text-secondary text-uppercase fs-7 mb-3">Detalles del Huésped</h6>
+                    <div class="row g-2 fs-7">
+                        <div class="col-sm-4 text-muted">Nombre Completo:</div>
+                        <div class="col-sm-8 fw-semibold text-dark">@Model.NombreDeLaPersona</div>
+
+                        <div class="col-sm-4 text-muted">Identificación:</div>
+                        <div class="col-sm-8 text-dark font-monospace">@Model.Identificacion</div>
+
+                        <div class="col-sm-4 text-muted">Correo de Contacto:</div>
+                        <div class="col-sm-8 text-dark">@Model.Correo</div>
+
+                        <div class="col-sm-4 text-muted">Teléfono:</div>
+                        <div class="col-sm-8 text-dark">@Model.Telefono</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Información de la Estadía -->
+            <div class="p-3 bg-light rounded-3 my-4">
+                <h6 class="fw-bold text-dark mb-3"><i class="bi bi-calendar3 me-2 text-primary"></i>Resumen del Hospedaje</h6>
+                <div class="row text-center g-3 fs-7">
+                    <div class="col-4 border-end">
+                        <span class="text-muted d-block">Check-In</span>
+                        <span class="fw-bold text-dark">@Model.FechaInicioReserva.ToString("dd/MM/yyyy")</span>
+                    </div>
+                    <div class="col-4 border-end">
+                        <span class="text-muted d-block">Check-Out</span>
+                        <span class="fw-bold text-dark">@Model.FechaFinReserva.ToString("dd/MM/yyyy")</span>
+                    </div>
+                    <div class="col-4">
+                        <span class="text-muted d-block">Total Noches</span>
+                        <span class="badge bg-dark px-2 py-1">@noches Noches</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Desglose de Cobros -->
+            <h6 class="fw-bold text-secondary text-uppercase fs-7 mb-3">Desglose Financiero</h6>
+            <div class="table-responsive">
+                <table class="table table-sm align-middle fs-7">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Descripción del Servicio</th>
+                            <th class="text-center">Cálculo</th>
+                            <th class="text-end">Subtotal</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <span class="fw-semibold text-dark">Hospedaje - @habitacion!.NombreDeHabitacion</span>
+                                <small class="text-muted d-block">Código: @habitacion.CodigoDeHabitacion</small>
+                            </td>
+                            <td class="text-center font-monospace">@noches x ₡@habitacion.CostoDeReserva.ToString("N2")</td>
+                            <td class="text-end fw-semibold text-dark">₡@((noches * habitacion.CostoDeReserva).ToString("N2"))</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span class="fw-semibold text-dark">Servicio Único de Limpieza</span>
+                                <small class="text-muted d-block">Tasa obligatoria operativa</small>
+                            </td>
+                            <td class="text-center text-muted">—</td>
+                            <td class="text-end fw-semibold text-dark">₡@habitacion.CostoDeLimpieza.ToString("N2")</td>
+                        </tr>
+                        <tr class="table-light border-top border-dark-subtle">
+                            <td colspan="2" class="text-end fw-bold text-dark fs-6 py-2">Monto Total Pagado:</td>
+                            <td class="text-end fw-bold text-success fs-5 py-2">₡@Model.MontoTotal.ToString("N2")</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pie de Factura -->
+            <div class="text-center mt-5">
+                <p class="text-muted fs-7 mb-1">¡Gracias por elegir a Hotel Los Patitos, @Model.NombreDeLaPersona!</p>
+                <small class="text-muted-50 fs-8">Registro generado de forma automatizada el @Model.FechaDeRegistro.ToString("dd/MM/yyyy hh:mm tt")</small>
+            </div>
+        </div>
+    </div>
+</div>
