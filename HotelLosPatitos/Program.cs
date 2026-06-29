@@ -19,6 +19,10 @@ namespace HotelLosPatitos
             builder.Services.AddScoped<HotelLosPatitos.Domain.Interfaces.IHabitacionRepository, HotelLosPatitos.Infrastructure.Repositories.HabitacionRepository>();
             builder.Services.AddScoped<HotelLosPatitos.Domain.Interfaces.IReservacionRepository, HotelLosPatitos.Infrastructure.Repositories.ReservacionRepository>();
 
+            // registrar servicios de la capa de aplicación
+            builder.Services.AddScoped<HotelLosPatitos.Application.Interfaces.IHabitacionService, HotelLosPatitos.Application.Services.HabitacionService>();
+            builder.Services.AddScoped<HotelLosPatitos.Application.Interfaces.IReservacionService, HotelLosPatitos.Application.Services.ReservacionService>();
+
             // Add services to the container.
             builder.Services.AddControllersWithViews();
 
