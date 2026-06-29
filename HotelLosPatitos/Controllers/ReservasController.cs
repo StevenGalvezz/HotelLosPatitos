@@ -63,37 +63,48 @@ namespace HotelLosPatitos.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Reservar(Reservacion reservacion)
         {
-            // Buscamos la habitación de nuevo para recargar sus costos operativos
             var habitacion = await _habitacionService.ObtenerHabitacionPorIdAsync(reservacion.IdHabitacion);
-
             if (habitacion == null)
             {
                 return NotFound();
             }
 
-            // Validaciones básicas de fechas antes de mandar al servicio
-            if (reservacion.FechaFinReserva <= reservacion.FechaInicioReserva)
+            // 1. VALIDACIÓN: Evitar que reserven en días pasados
+            if (reservacion.FechaInicioReserva.Date < DateTime.Today)
             {
-                ModelState.AddModelError("FechaFinReserva", "La fecha de fin debe ser posterior a la fecha de inicio.");
+                ModelState.AddModelError("FechaInicioReserva", "No se permiten reservaciones para fechas anteriores al día de hoy.");
+            }
+
+            // 2. VALIDACIÓN: Las fechas de fin deben ser coherentes
+            if (reservacion.FechaFinReserva.Date <= reservacion.FechaInicioReserva.Date)
+            {
+                ModelState.AddModelError("FechaFinReserva", "La fecha de Check-Out (Fin) debe ser posterior a la fecha de Check-In (Inicio).");
+            }
+
+            // 3. VALIDACIÓN: Mayoría de edad
+            var edad = DateTime.Today.Year - reservacion.FechaNacimiento.Year;
+            if (reservacion.FechaNacimiento.Date > DateTime.Today.AddYears(-edad)) edad--;
+            if (edad < 18)
+            {
+                ModelState.AddModelError("FechaNacimiento", "Estimado usuario, debe ser mayor de edad (18 años o más) para registrar una reservación.");
             }
 
             if (ModelState.IsValid)
             {
                 try
                 {
-                    // El servicio se encarga de calcular el MontoTotal automáticamente con la fórmula
+                    // El servicio se encargará de validar el cruce de fechas internamente antes de guardar
                     var resultado = await _reservacionService.CrearReservaAsync(reservacion);
-
-                    // Si todo se guarda con éxito, mandamos al usuario directo a la vista de detalles (Factura)
                     return RedirectToAction(nameof(Detalles), new { idReservacion = resultado.Id });
                 }
                 catch (Exception ex)
                 {
-                    ModelState.AddModelError("", ex.Message);
+                    // se captura el mensaje que tire el servicio (por ejemplo, si la habitación está ocupada)
+                    var mensajeDetallado = ex.InnerException != null ? ex.InnerException.Message : ex.Message;
+                    ModelState.AddModelError("", mensajeDetallado);
                 }
             }
 
-            // Si hubo un error, volvemos a pasar la habitación para no romper la vista
             ViewData["Habitacion"] = habitacion;
             return View(reservacion);
         }
@@ -130,7 +141,7 @@ namespace HotelLosPatitos.Web.Controllers
                 return NotFound();
             }
 
-            // Traemos la habitación vinculada para poder mostrar los costos unitarios en la factura
+            // se trae la habitación vinculada para poder mostrar los costos unitarios en la factura
             var habitacion = await _habitacionService.ObtenerHabitacionPorIdAsync(reservacion.IdHabitacion);
             ViewData["Habitacion"] = habitacion;
 

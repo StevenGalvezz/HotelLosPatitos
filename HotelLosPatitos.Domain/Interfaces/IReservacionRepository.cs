@@ -9,5 +9,6 @@ namespace HotelLosPatitos.Domain.Interfaces
         Task<IEnumerable<Reservacion>> ObtenerHistoricoPorHabitacionAsync(int idHabitacion);
         Task<Reservacion?> ObtenerPorIdAsync(int id);
         Task AgregarAsync(Reservacion reservacion);
+        Task<bool> ValidarDisponibilidadAsync(int idHabitacion, DateTime inicio, DateTime fin);
     }
 }

@@ -30,16 +30,22 @@ namespace HotelLosPatitos.Application.Services
 
         public async Task<Reservacion> CrearReservaAsync(Reservacion reservacion)
         {
-            // se traen los datos de la habitación para usar sus costos reales guardados en la BD
+            // Se traen los datos de la habitación para usar sus costos reales guardados en la BD
             var habitacion = await _habitacionRepository.ObtenerPorIdAsync(reservacion.IdHabitacion);
             if (habitacion == null)
                 throw new Exception("La habitación seleccionada no existe.");
 
-            // inactiva = no se puede reservar
+            // Inactiva = no se puede reservar
             if (!habitacion.Estado)
                 throw new Exception("Estimado usuario, la habitación seleccionada se encuentra inactiva.");
 
-            // calculo del monto total automaticamente con la fórmula
+            // Validar que no existan choques de fechas con otras reservas existentes
+            bool estaOcupada = await _reservacionRepository.ValidarDisponibilidadAsync(reservacion.IdHabitacion, reservacion.FechaInicioReserva, reservacion.FechaFinReserva);
+
+            if (estaOcupada)
+                throw new Exception("Estimado usuario, la habitación seleccionada ya se encuentra reservada para las fechas seleccionadas.");
+
+            // Cálculo del monto total automáticamente con la fórmula
             reservacion.MontoTotal = CalcularMontoTotal(
                 reservacion.FechaInicioReserva,
                 reservacion.FechaFinReserva,
@@ -47,9 +53,13 @@ namespace HotelLosPatitos.Application.Services
                 habitacion.CostoDeLimpieza
             );
 
+            // Estampamos la fecha y hora exacta del registro
             reservacion.FechaDeRegistro = DateTime.Now;
 
+            // CORRECCIÓN: Ejecutamos el método directamente sin guardarlo en una variable 'void'
             await _reservacionRepository.AgregarAsync(reservacion);
+
+            // Devolvemos el mismo objeto 'reservacion', el cual ya lleva el ID asignado automáticamente por EF
             return reservacion;
         }
 

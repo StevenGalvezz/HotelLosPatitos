@@ -38,5 +38,14 @@ namespace HotelLosPatitos.Infrastructure.Repositories
             await _context.Reservaciones.AddAsync(reservacion);
             await _context.SaveChangesAsync();
         }
+
+        public async Task<bool> ValidarDisponibilidadAsync(int idHabitacion, DateTime inicio, DateTime fin)
+        {
+            // Regla matemática de cruce de rangos: (Inicio1 <= Fin2) Y (Fin1 >= Inicio2)
+            return await _context.Reservaciones.AnyAsync(r =>
+                r.IdHabitacion == idHabitacion &&
+                r.FechaInicioReserva.Date < fin.Date &&
+                r.FechaFinReserva.Date > inicio.Date);
+        }
     }
 }
