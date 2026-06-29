@@ -1,0 +1,92 @@
+﻿@model IEnumerable<HotelLosPatitos.Domain.Entities.Reservacion>
+
+@{
+    ViewData["Title"] = "Historial de Reservas";
+    var nombreHabitacion = ViewData["NombreHabitacion"] as string;
+    var codigoHabitacion = ViewData["CodigoHabitacion"] as string;
+}
+
+<div class="container my-5">
+    <!-- Botón para regresar a las habitaciones -->
+    <div class="mb-3">
+        <a asp-controller="Habitaciones" asp-action="Index" class="btn btn-outline-secondary btn-sm px-3">
+            <i class="bi bi-arrow-left me-1"></i> Volver al Panel de Habitaciones
+        </a>
+    </div>
+
+    <!-- Encabezado con Contexto de Filtro -->
+    <div class="d-flex justify-content-between align-items-center mb-4 p-4 bg-white rounded shadow-sm border-start border-4 border-info">
+        <div>
+            <h1 class="display-6 fw-bold text-dark mb-1">Histórico de Reservaciones</h1>
+            <p class="text-muted mb-0">
+                Mostrando el historial para la habitación:
+                <span class="badge bg-info text-dark fw-bold px-2 py-1 fs-6 ms-1">@codigoHabitacion - @nombreHabitacion</span>
+            </p>
+        </div>
+        <div class="text-end">
+            <span class="fs-7 text-muted d-block">Total Reservas</span>
+            <span class="badge bg-dark fs-5 px-3">@Model.Count()</span>
+        </div>
+    </div>
+
+    <!-- Tabla Histórica -->
+    <div class="card shadow-sm border-0 rounded-3 overflow-hidden">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-striped table-hover align-middle mb-0">
+                    <thead class="bg-secondary text-white text-uppercase fs-7">
+                        <tr>
+                            <th class="ps-4 py-3">Nombre del Huésped</th>
+                            <th>Identificación</th>
+                            <th>Teléfono</th>
+                            <th>Correo Electrónico</th>
+                            <th class="text-center">F. Nacimiento</th>
+                            <th class="text-center">Inicio Reserva</th>
+                            <th class="text-center">Fin Reserva</th>
+                            <th class="text-center">F. Registro</th>
+                            <th class="text-end pe-4">Monto Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (!Model.Any())
+                        {
+                            <tr>
+                                <td colspan="9" class="text-center py-5 text-muted">
+                                    <i class="bi bi-calendar-x display-6 d-block mb-3 text-secondary"></i>
+                                    Esta habitación aún no cuenta con registros de reservaciones en el histórico.
+                                </td>
+                            </tr>
+                        }
+                        else
+                        {
+                            foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td class="ps-4 fw-semibold text-dark">@item.NombreDeLaPersona</td>
+                                    <td><span class="font-monospace text-muted">@item.Identificacion</span></td>
+                                    <td>@item.Telefono</td>
+                                    <td><a href="mailto:@item.Correo" class="text-decoration-none text-info">@item.Correo</a></td>
+                                    <td class="text-center fs-7">@item.FechaNacimiento.ToString("dd/MM/yyyy")</td>
+                                    <td class="text-center font-monospace bg-light-subtle">
+                                        <span class="badge bg-success-subtle text-success border border-success-subtle px-2">
+                                            @item.FechaInicioReserva.ToString("dd/MM/yyyy")
+                                        </span>
+                                    </td>
+                                    <td class="text-center font-monospace bg-light-subtle">
+                                        <span class="badge bg-danger-subtle text-danger border border-danger-subtle px-2">
+                                            @item.FechaFinReserva.ToString("dd/MM/yyyy")
+                                        </span>
+                                    </td>
+                                    <td class="text-center fs-7 text-muted">@item.FechaDeRegistro.ToString("dd/MM/yyyy hh:mm tt")</td>
+                                    <td class="text-end pe-4 fw-bold text-success fs-6">
+                                        ₡@item.MontoTotal.ToString("N2")
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
