@@ -21,24 +21,24 @@
             <form asp-action="Create" method="post">
                 @Html.AntiForgeryToken()
 
-                <div asp-validation-summary="ModelOnly" class="alert alert-danger shadow-sm border-start border-4 border-danger rounded-3" role="alert"></div>
+                <!-- Cuadrado rojo removido por completo -->
 
                 <div class="row g-3">
                     <div class="col-md-4">
                         <label asp-for="CodigoDeHabitacion" class="form-label fw-semibold text-secondary">Código</label>
                         <input asp-for="CodigoDeHabitacion" class="form-control" placeholder="Ej: J-101" maxlength="7" required />
-                        <span asp-validation-for="CodigoDeHabitacion" class="text-danger fs-7"></span>
+                        <span asp-validation-for="CodigoDeHabitacion" class="text-danger fs-7 d-block mt-1"></span>
                     </div>
                     <div class="col-md-8">
                         <label asp-for="NombreDeHabitacion" class="form-label fw-semibold text-secondary">Nombre de la Habitación</label>
                         <input asp-for="NombreDeHabitacion" class="form-control" placeholder="Ej: Junior Familiar Estandar" maxlength="30" required />
-                        <span asp-validation-for="NombreDeHabitacion" class="text-danger fs-7"></span>
+                        <span asp-validation-for="NombreDeHabitacion" class="text-danger fs-7 d-block mt-1"></span>
                     </div>
 
                     <div class="col-md-5">
                         <label asp-for="Ubicacion" class="form-label fw-semibold text-secondary">Ubicación</label>
                         <input asp-for="Ubicacion" class="form-control" placeholder="Ej: Piso 1" maxlength="10" required />
-                        <span asp-validation-for="Ubicacion" class="text-danger fs-7"></span>
+                        <span asp-validation-for="Ubicacion" class="text-danger fs-7 d-block mt-1"></span>
                     </div>
                     <div class="col-md-7">
                         <label asp-for="TipoDeHabitacion" class="form-label fw-semibold text-secondary">Tipo de Habitación</label>
@@ -48,29 +48,29 @@
                             <option value="2">2 - Superior</option>
                             <option value="3">3 - Suite</option>
                         </select>
-                        <span asp-validation-for="TipoDeHabitacion" class="text-danger fs-7"></span>
+                        <span asp-validation-for="TipoDeHabitacion" class="text-danger fs-7 d-block mt-1"></span>
                     </div>
 
                     <div class="col-md-4">
                         <label asp-for="CantidadDeHuespedesPermitidos" class="form-label fw-semibold text-secondary">Máx. Huéspedes</label>
                         <input asp-for="CantidadDeHuespedesPermitidos" type="number" class="form-control" min="1" required />
-                        <span asp-validation-for="CantidadDeHuespedesPermitidos" class="text-danger fs-7"></span>
+                        <span asp-validation-for="CantidadDeHuespedesPermitidos" class="text-danger fs-7 d-block mt-1"></span>
                     </div>
                     <div class="col-md-4">
                         <label asp-for="CantidadDeCamas" class="form-label fw-semibold text-secondary">Cantidad de Camas</label>
                         <input asp-for="CantidadDeCamas" type="number" class="form-control" min="0" required />
-                        <span asp-validation-for="CantidadDeCamas" class="text-danger fs-7"></span>
+                        <span asp-validation-for="CantidadDeCamas" class="text-danger fs-7 d-block mt-1"></span>
                     </div>
                     <div class="col-md-4">
                         <label asp-for="CantidadDeBanos" class="form-label fw-semibold text-secondary">Cantidad de Baños</label>
                         <input asp-for="CantidadDeBanos" type="number" class="form-control" min="0" required />
-                        <span asp-validation-for="CantidadDeBanos" class="text-danger fs-7"></span>
+                        <span asp-validation-for="CantidadDeBanos" class="text-danger fs-7 d-block mt-1"></span>
                     </div>
 
                     <div class="col-md-7">
                         <label asp-for="EncargadoDeLimpieza" class="form-label fw-semibold text-secondary">Encargado de Limpieza</label>
                         <input asp-for="EncargadoDeLimpieza" class="form-control" placeholder="Nombre completo del responsable" maxlength="100" required />
-                        <span asp-validation-for="EncargadoDeLimpieza" class="text-danger fs-7"></span>
+                        <span asp-validation-for="EncargadoDeLimpieza" class="text-danger fs-7 d-block mt-1"></span>
                     </div>
                     <div class="col-md-5">
                         <label asp-for="CostoDeLimpieza" class="form-label fw-semibold text-secondary">Costo de Limpieza (₡)</label>
@@ -78,7 +78,7 @@
                             <span class="input-group-text bg-white">₡</span>
                             <input asp-for="CostoDeLimpieza" type="number" step="0.01" class="form-control" min="0.01" required />
                         </div>
-                        <span asp-validation-for="CostoDeLimpieza" class="text-danger fs-7"></span>
+                        <span asp-validation-for="CostoDeLimpieza" class="text-danger fs-7 d-block mt-1"></span>
                     </div>
 
                     <div class="col-md-12">
@@ -87,7 +87,7 @@
                             <span class="input-group-text bg-white">₡</span>
                             <input asp-for="CostoDeReserva" type="number" step="0.01" class="form-control" min="0.01" required />
                         </div>
-                        <span asp-validation-for="CostoDeReserva" class="text-danger fs-7"></span>
+                        <span asp-validation-for="CostoDeReserva" class="text-danger fs-7 d-block mt-1"></span>
                     </div>
                 </div>
 
@@ -101,3 +101,7 @@
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

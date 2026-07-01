@@ -22,7 +22,7 @@
                 @Html.AntiForgeryToken()
                 <input type="hidden" asp-for="Id" />
 
-                <div asp-validation-summary="ModelOnly" class="alert alert-danger shadow-sm border-start border-4 border-danger rounded-3" role="alert"></div>
+                <!-- Cuadrado rojo removido por completo -->
 
                 <div class="row g-3">
                     <div class="col-12">
@@ -54,24 +54,24 @@
                             <option value="2">2 - Superior</option>
                             <option value="3">3 - Suite</option>
                         </select>
-                        <span asp-validation-for="TipoDeHabitacion" class="text-danger fs-7"></span>
+                        <span asp-validation-for="TipoDeHabitacion" class="text-danger fs-7 d-block mt-1"></span>
                     </div>
 
                     <div class="col-md-7">
                         <label asp-for="EncargadoDeLimpieza" class="form-label fw-semibold text-secondary">Encargado de Limpieza</label>
                         <input asp-for="EncargadoDeLimpieza" class="form-control" maxlength="100" required />
-                        <span asp-validation-for="EncargadoDeLimpieza" class="text-danger fs-7"></span>
+                        <span asp-validation-for="EncargadoDeLimpieza" class="text-danger fs-7 d-block mt-1"></span>
                     </div>
 
                     <div class="col-md-4">
                         <label asp-for="CantidadDeHuespedesPermitidos" class="form-label fw-semibold text-secondary">Máx. Huéspedes</label>
                         <input asp-for="CantidadDeHuespedesPermitidos" type="number" class="form-control" min="1" required />
-                        <span asp-validation-for="CantidadDeHuespedesPermitidos" class="text-danger fs-7"></span>
+                        <span asp-validation-for="CantidadDeHuespedesPermitidos" class="text-danger fs-7 d-block mt-1"></span>
                     </div>
                     <div class="col-md-4">
                         <label asp-for="CantidadDeCamas" class="form-label fw-semibold text-secondary">Cantidad de Camas</label>
                         <input asp-for="CantidadDeCamas" type="number" class="form-control" min="0" required />
-                        <span asp-validation-for="CantidadDeCamas" class="text-danger fs-7"></span>
+                        <span asp-validation-for="CantidadDeCamas" class="text-danger fs-7 d-block mt-1"></span>
                     </div>
                     <div class="col-md-4">
                         <label asp-for="CostoDeLimpieza" class="form-label fw-semibold text-secondary">Costo Limpieza (₡)</label>
@@ -79,7 +79,7 @@
                             <span class="input-group-text bg-white">₡</span>
                             <input asp-for="CostoDeLimpieza" type="number" step="0.01" class="form-control" min="0.01" required />
                         </div>
-                        <span asp-validation-for="CostoDeLimpieza" class="text-danger fs-7"></span>
+                        <span asp-validation-for="CostoDeLimpieza" class="text-danger fs-7 d-block mt-1"></span>
                     </div>
 
                     <div class="col-md-8">
@@ -88,7 +88,7 @@
                             <span class="input-group-text bg-white">₡</span>
                             <input asp-for="CostoDeReserva" type="number" step="0.01" class="form-control" min="0.01" required />
                         </div>
-                        <span asp-validation-for="CostoDeReserva" class="text-danger fs-7"></span>
+                        <span asp-validation-for="CostoDeReserva" class="text-danger fs-7 d-block mt-1"></span>
                     </div>
 
                     <div class="col-md-4 d-flex align-items-end pb-2">
@@ -109,3 +109,7 @@
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
